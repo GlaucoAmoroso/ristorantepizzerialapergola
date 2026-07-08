@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ristorante Pizzeria La Pergola | Vasto</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FBFBFA;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-accent { color: #b91c1c; }
+        .bg-accent { background-color: #b91c1c; }
+        .border-accent { border-color: #b91c1c; }
+        
+        .hero-overlay { background: rgba(30, 10, 10, 0.65); }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-stone-800 antialiased selection:bg-stone-200">
+
+    <!-- COOKIE BANNER NORMATIVA GDPR -->
+    <div id="cookie-banner" class="fixed bottom-6 left-6 right-6 md:max-w-xl bg-white/95 backdrop-blur-md border border-stone-200 shadow-2xl p-6 z-50 rounded-xl transition-all duration-500 transform translate-y-20 opacity-0 hidden">
+        <div class="space-y-4">
+            <h4 class="font-serif text-lg font-semibold text-stone-900">Informativa sui Cookie</h4>
+            <p class="text-xs text-stone-600 leading-relaxed">
+                Questo sito utilizza cookie tecnici necessari al funzionamento e cookie di terze parti (Google Maps) per mostrarti la mappa interattiva. Puoi scegliere se accettare i cookie di tracciamento o navigare con le funzioni limitate. Consulta la nostra <a href="#" id="open-privacy-cookie" class="underline text-accent hover:text-stone-900">Privacy Policy</a>.
+            </p>
+            <div class="flex items-center justify-end space-x-3 text-xs uppercase tracking-widest font-semibold pt-2">
+                <button id="cookie-reject" class="text-stone-500 hover:text-stone-900 transition-colors px-4 py-2">Rifiuta</button>
+                <button id="cookie-accept" class="bg-stone-900 text-white px-5 py-2.5 rounded-lg hover:bg-accent transition-colors shadow-sm">Accetta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#FBFBFA]/80 backdrop-blur-md border-b border-stone-200/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#hero" class="text-xl font-serif tracking-widest uppercase text-stone-900">
+                La Pergola
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-sm tracking-widest uppercase font-medium">
+                <a href="#ristorante" class="hover:text-stone-500 transition-colors">Il Ristorante</a>
+                <a href="#galleria" class="hover:text-stone-500 transition-colors">Galleria</a>
+                <a href="#menu" class="hover:text-stone-500 transition-colors">Menu</a>
+                <a href="#location" class="hover:text-stone-500 transition-colors">Dove Siamo</a>
+                <a href="#contatti" class="bg-accent text-white px-5 py-2.5 rounded-none hover:bg-stone-800 transition-colors">Prenota ora</a>
+            </nav>
+
+            <button id="menu-btn" class="md:hidden flex flex-col justify-between w-6 h-4 transform transition-all duration-300 z-50 focus:outline-none" aria-label="Apri Menu">
+                <span id="bar1" class="w-full h-[1.5px] bg-stone-900 transition-all duration-300"></span>
+                <span id="bar2" class="w-full h-[1.5px] bg-stone-900 transition-all duration-300"></span>
+                <span id="bar3" class="w-full h-[1.5px] bg-stone-900 transition-all duration-300"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#FBFBFA] z-40 flex flex-col justify-center items-center transform translate-x-full transition-transform duration-500 ease-in-out md:hidden">
+        <nav class="flex flex-col items-center space-y-8 text-xl tracking-widest uppercase font-serif">
+            <a href="#ristorante" class="mobile-link text-stone-900 hover:text-stone-500 transition-colors">Il Ristorante</a>
+            <a href="#galleria" class="mobile-link text-stone-900 hover:text-stone-500 transition-colors">Galleria</a>
+            <a href="#menu" class="mobile-link text-stone-900 hover:text-stone-500 transition-colors">Menu</a>
+            <a href="#location" class="mobile-link text-stone-900 hover:text-stone-500 transition-colors">Dove Siamo</a>
+            <a href="#contatti" class="mobile-link bg-accent text-white px-8 py-3 rounded-none uppercase text-sm font-sans tracking-widest font-medium hover:bg-stone-800 transition-colors">Prenota ora</a>
+        </nav>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0 bg-stone-900">
+            <div class="absolute inset-0 hero-overlay z-10"></div>
+            <img src="foto/hero.png" alt="Pizza e Trattoria" class="w-full h-full object-cover object-center opacity-80">
+            <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent to-stone-950 z-10 pointer-events-none"></div>
+        </div>
+        
+        <div class="relative z-20 max-w-4xl mx-auto px-6 text-center">
+            <span class="text-sm tracking-widest uppercase text-red-100 block mb-4 font-medium drop-shadow-md">Tradizione nel cuore di Vasto</span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white leading-tight mb-6 drop-shadow-lg">
+                La Pergola
+            </h1>
+            <p class="text-lg md:text-xl font-light italic text-red-50 max-w-xl mx-auto mb-10 drop-shadow-md">
+                Da decenni una certezza. Dalla celebre pizza di Enzo a piatti generosi di carne e pesce, in un'atmosfera elegante e accogliente.
+            </p>
+            <a href="#menu" class="inline-block border border-white text-white hover:bg-white hover:text-stone-900 px-8 py-3.5 tracking-widest text-sm uppercase transition-all duration-300 font-medium">
+                Scopri il Menu
+            </a>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+            <a href="#ristorante" aria-label="Scorri giù">
+                <svg class="w-5 h-5 text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- IL RISTORANTE & RECENSIONI -->
+    <section id="ristorante" class="py-24 bg-stone-950 text-stone-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div class="lg:col-span-4 space-y-6">
+                <span class="text-xs uppercase tracking-widest text-red-400 font-semibold block">Ospitalità e Qualità</span>
+                <h2 class="text-3xl md:text-4xl font-serif text-white">Una vera Trattoria</h2>
+                <p class="text-stone-300 font-light leading-relaxed">
+                    Situata in un tranquillo vicolo del centro storico, La Pergola offre ampi tavoli, tovaglie di stoffa bianche e un servizio attento. Lasciati viziare dalle nostre porzioni abbondanti, perfette sia per chi ama i sapori di mare sia per chi preferisce un'ottima tagliata di carne o la pizza a regola d'arte.
+                </p>
+                <div class="pt-4 flex gap-4 flex-wrap">
+                    <span class="inline-flex items-center justify-center border border-red-500/50 bg-red-900/20 text-red-200 px-4 py-2 text-xs uppercase tracking-widest font-medium rounded-full">Consumazione sul posto</span>
+                    <span class="inline-flex items-center justify-center border border-red-500/50 bg-red-900/20 text-red-200 px-4 py-2 text-xs uppercase tracking-widest font-medium rounded-full">Asporto</span>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-8 relative w-full overflow-hidden">
+                <div class="w-full overflow-hidden relative">
+                    <div class="animate-marquee flex flex-row">
+                        <div class="w-[320px] md:w-[380px] shrink-0 px-3">
+                            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl flex flex-col justify-between h-full">
+                                <p class="text-sm font-serif italic text-stone-300 mb-4">"Da decenni 'La Pergola' è una certezza, con la qualità invariata nel tempo. La pizza di Enzo è ottima, ma se si desiderano piatti di pesce o carne, la scelta è buona e le porzioni generose."</p>
+                                <p class="text-xs text-red-400 font-medium">⭐⭐⭐⭐⭐ - Cliente affezionato</p>
+                            </div>
+                        </div>
+                        <div class="w-[320px] md:w-[380px] shrink-0 px-3">
+                            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl flex flex-col justify-between h-full">
+                                <p class="text-sm font-serif italic text-stone-300 mb-4">"Graziosa trattoria nel centro storico. I piatti sono buoni, ben presentati ed abbondanti. La tagliata mi è stata servita su un tagliere di legno ed era tenerissima, con scaglie di parmigiano."</p>
+                                <p class="text-xs text-red-400 font-medium">⭐⭐⭐⭐⭐ - Turista</p>
+                            </div>
+                        </div>
+                        <div class="w-[320px] md:w-[380px] shrink-0 px-3">
+                            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl flex flex-col justify-between h-full">
+                                <p class="text-sm font-serif italic text-stone-300 mb-4">"Ottimo ristorantino con discreta scelta tra pesce, carne o pizza. Buon servizio con ottima presentazione dei piatti. Prezzi nella media. Ci torneremo sicuramente!"</p>
+                                <p class="text-xs text-red-400 font-medium">⭐⭐⭐⭐⭐ - Viaggiatore</p>
+                            </div>
+                        </div>
+                        <div class="w-[320px] md:w-[380px] shrink-0 px-3">
+                            <div class="bg-stone-900 border border-stone-800 p-6 rounded-2xl flex flex-col justify-between h-full">
+                                <p class="text-sm font-serif italic text-stone-300 mb-4">"Gradevoli gli omaggini ricevuti al nostro arrivo: un drink analcolico ed un crostino. Alla fine della cena un liquorino al cioccolato. Consigliatissimo per una serata a Vasto."</p>
+                                <p class="text-xs text-red-400 font-medium">⭐⭐⭐⭐⭐ - Visitatore</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERIA -->
+    <section id="galleria" class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold block mb-2">I nostri Piatti</span>
+                <h2 class="text-3xl md:text-4xl font-serif text-stone-900">La Nostra Cucina</h2>
+                <div class="w-12 h-[1px] bg-stone-300 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1920&q=80" alt="Pizza Margherita" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1920&q=80" alt="Pizza" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1920&q=80" alt="Forno" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=1920&q=80" alt="Pizza" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=1920&q=80" alt="Pesce" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+                <div class="overflow-hidden bg-stone-100 aspect-square rounded-lg shadow-sm"><img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=1920&q=80" alt="Pizza" class="w-full h-full object-cover hover:scale-105 transition-all duration-700"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION MENU -->
+    <section id="menu" class="py-24 border-t border-stone-200/60 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold block mb-2">Tradizione e Abbondanza</span>
+                <h2 class="text-3xl md:text-4xl font-serif text-stone-900">Il Menu</h2>
+                <div class="w-12 h-[1px] bg-stone-300 mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12">
+                
+                <!-- LE PIZZE -->
+                <div>
+                    <h3 class="text-xl font-serif text-accent border-b border-stone-100 pb-3 mb-6 tracking-wide">
+                        Le Pizze
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Marinara</h4>
+                                <span class="font-medium text-stone-900">5,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, origano, aglio</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Margherita</h4>
+                                <span class="font-medium text-stone-900">6,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Napoli</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, acciughe</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Funghi Freschi</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, funghi freschi</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Prosciutto</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, prosciutto cotto</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Diavola</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, salame piccante, olive</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Gabbiano</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, tonno, olive</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Cristina</h4>
+                                <span class="font-medium text-stone-900">9,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, pachino</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Bellavista</h4>
+                                <span class="font-medium text-stone-900">10,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, funghi freschi, prosciutto cotto</p>
+                        </div>
+                        <div class="group border-t border-stone-100 pt-3">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">A.M.</h4>
+                                <span class="font-medium text-stone-900">9,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, funghi freschi...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">D'Alonzo</h4>
+                                <span class="font-medium text-stone-900">9,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, patate, prosciutto cotto...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Porca Vacca</h4>
+                                <span class="font-medium text-stone-900">10,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">pomodoro, mozzarella, gorgonzola...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Calzone</h4>
+                                <span class="font-medium text-stone-900">9,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, ricotta, salame piccante...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Giove Farcita</h4>
+                                <span class="font-medium text-stone-900">10,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">provola affumicata, pachino...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Letizia</h4>
+                                <span class="font-medium text-stone-900">11,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, rucola, bresaola...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">G. D'Annunzio</h4>
+                                <span class="font-medium text-stone-900">9,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, ventricina</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Claudio</h4>
+                                <span class="font-medium text-stone-900">10,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, stracchino...</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">L. Siciliana</h4>
+                                <span class="font-medium text-stone-900">8,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">mozzarella, melanzane...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARNE E PESCE -->
+                <div>
+                    <h3 class="text-xl font-serif text-accent border-b border-stone-100 pb-3 mb-6 tracking-wide">
+                        Secondi Piatti di Mare
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Frittura di Paranza</h4>
+                                <span class="font-medium text-stone-900">19,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Fired Fish</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Mazzancolle alla Enzo</h4>
+                                <span class="font-medium text-stone-900">22,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Enzo's Special Shrimps</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Pescatrice - Spigola al Forno con Patate</h4>
+                                <span class="font-medium text-stone-900">50,00 € / Kg</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Monkfish - Sea Bass oven Baked with Potatoes (a modo nostro - our style)</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Brodetto alla Vastese <span class="text-sm font-normal text-stone-500">(per 2 persone)</span></h4>
+                                <span class="font-medium text-stone-900">70,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Brodetto alla Vastese (for 2 people) - da prenotare almeno 24 ore prima</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-serif text-accent border-b border-stone-100 pb-3 mb-6 tracking-wide mt-12">
+                        Secondi Piatti
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Entrecôte ai Ferri</h4>
+                                <span class="font-medium text-stone-900">15,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Entrecôte Grilled</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Entrecôte al Pepe Verde</h4>
+                                <span class="font-medium text-stone-900">20,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Entrecôte Green Pepper</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Entrecôte ai Funghi porcini e Crema di Tartufo</h4>
+                                <span class="font-medium text-stone-900">23,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Entrecôte with Porcini Mushrooms & Truffle Cream</p>
+                        </div>
+                        <div class="group">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-medium text-stone-900">Tagliata di Manzo</h4>
+                                <span class="font-medium text-stone-900">18,00 €</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Sliced Beef (rucola, pachino, scaglie di parmigiano, fungo fresco)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DOVE SIAMO / MAPPA -->
+    <section id="location" class="py-20 bg-[#FBFBFA] border-t border-stone-200/40">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold block">Posizione</span>
+                    <h2 class="text-3xl md:text-4xl font-serif text-stone-900">Nel Cuore di Vasto</h2>
+                    <p class="text-stone-600 font-light leading-relaxed">
+                        Ci trovi in <strong>Via Adua, 6, 66054 Vasto (CH)</strong>. <br>
+                        Il nostro ristorante si affaccia in un vicolo tranquillo del centro storico, pronto ad accoglierti con tavolini all'aperto e un'atmosfera elegante ma familiare.
+                    </p>
+                    <div class="pt-4">
+                        <a href="https://www.google.it/maps/search/Ristorante+Pizzeria+La+Pergola+Vasto" target="_blank" rel="noopener" class="inline-flex items-center text-sm tracking-widest font-medium uppercase text-accent hover:text-stone-600 transition-colors group">
+                            <span>Apri in Google Maps</span>
+                            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="map-container" class="lg:col-span-7 h-[450px] w-full bg-stone-100 border border-stone-200 shadow-xl relative overflow-hidden rounded-2xl flex items-center justify-center text-center p-6">
+                    <div id="map-placeholder" class="space-y-4">
+                        <p class="text-sm text-stone-600 font-light">Per visualizzare la mappa interattiva di Google Maps è necessario accettare i cookie di terze parti.</p>
+                        <button id="unlock-maps-btn" class="bg-stone-900 text-white text-xs uppercase tracking-widest font-semibold px-6 py-3 hover:bg-accent transition-all">Accetta e Sblocca</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM INFORMAZIONI / CONTATTI -->
+    <section id="contatti" class="py-24 bg-white border-t border-stone-200/60 scroll-mt-10">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div class="space-y-10">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-stone-400 font-semibold block mb-2">Info & Prenotazioni</span>
+                    <h2 class="text-3xl font-serif text-stone-900 mb-6">Prenota il tuo Tavolo</h2>
+                    <div class="border-t border-stone-100 text-sm font-light text-stone-600 divide-y divide-stone-100">
+                        <div class="py-3 flex justify-between">
+                            <span class="font-medium text-stone-800">Telefono</span>
+                            <span>0873 368020</span>
+                        </div>
+                        <div class="py-3 flex justify-between">
+                            <span class="font-medium text-stone-800">Orari</span>
+                            <span>Apre Giovedì alle ore 12:45</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4 pt-4 border-t border-stone-200/60">
+                    <p class="text-sm font-serif text-stone-600">
+                        Ti aspettiamo per farti gustare la nostra cucina con porzioni abbondanti e un servizio cortese ed efficiente. Al tuo arrivo, un piccolo omaggio di benvenuto ti farà sentire subito a casa.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-[#FBFBFA] p-8 shadow-xl border border-stone-200/40 rounded-2xl">
+                <h3 class="text-xl font-serif text-stone-900 mb-6">Richiedi una Prenotazione</h3>
+                <form action="https://api.web3forms.com/submit" method="POST" id="booking-form" class="space-y-5">
+                    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY_HERE">
+                    <input type="hidden" name="subject" value="Nuova Prenotazione Ristorante La Pergola - Vasto">
+                    
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-stone-500 font-medium mb-1.5">Nome Completo</label>
+                        <input type="text" name="name" required class="w-full bg-white border border-stone-200 px-4 py-2.5 text-sm rounded-none focus:outline-none focus:border-stone-900 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-stone-500 font-medium mb-1.5">Numero di Telefono</label>
+                        <input type="tel" name="phone" required class="w-full bg-white border border-stone-200 px-4 py-2.5 text-sm rounded-none focus:outline-none focus:border-stone-900 transition-colors" placeholder="+39">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-stone-500 font-medium mb-1.5">Dettagli Prenotazione</label>
+                        <textarea name="notes" rows="4" class="w-full bg-white border border-stone-200 px-4 py-2.5 text-sm rounded-none focus:outline-none focus:border-stone-900 transition-colors resize-none" placeholder="Data, numero di persone, preferenze sala interna/esterna..."></textarea>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3 pt-2">
+                        <input type="checkbox" id="privacy-check" required class="mt-1 w-4 h-4 text-stone-900 border-stone-300 rounded focus:ring-accent">
+                        <label for="privacy-check" class="text-xs text-stone-600 leading-normal">
+                            Accetto il trattamento dei dati personali ai fini della gestione della richiesta secondo la <a href="#" id="open-privacy-link" class="underline text-accent hover:text-stone-900">Privacy Policy</a>.
+                        </label>
+                    </div>
+
+                    <button type="submit" id="submit-btn" disabled class="w-full bg-stone-400 text-white text-xs uppercase tracking-widest font-semibold py-3.5 rounded-none cursor-not-allowed transition-all duration-300 hover:bg-accent disabled:hover:bg-stone-400">
+                        Accetta la Privacy per Continuare
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FOOTER CON DIRITTI RISERVATI -->
+    <footer class="bg-stone-900 text-stone-400 py-12 text-sm font-light">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-center md:text-left space-y-2">
+                <p class="font-serif text-white tracking-widest uppercase text-base">Ristorante Pizzeria La Pergola</p>
+                <p class="text-xs text-stone-300">Via Adua, 6, 66054 Vasto (CH) | Tel: 0873 368020</p>
+                <p class="text-[11px] text-stone-500 pt-1">© 2026 La Pergola. Tutti i diritti riservati.</p>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end space-y-3">
+                <div class="text-[11px] text-stone-500">
+                    <a href="#" id="footer-privacy-btn" class="hover:text-white transition-colors">Privacy & Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERFACCIA MODALE PRIVACY POLICY LEGALE -->
+    <div id="privacy-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white w-full max-w-3xl max-h-[80vh] overflow-y-auto p-6 md:p-10 rounded-2xl shadow-2xl space-y-6 no-scrollbar">
+            <div class="flex justify-between items-center border-b border-stone-200 pb-4">
+                <h3 class="font-serif text-2xl font-semibold text-stone-900">Privacy & Cookie Policy</h3>
+                <button id="close-privacy" class="text-stone-400 hover:text-stone-900 text-xl font-semibold">&times;</button>
+            </div>
+            <div class="text-xs text-stone-600 space-y-4 leading-relaxed font-light">
+                <p class="font-medium text-stone-900">Titolare del Trattamento dei Dati</p>
+                <p>Ristorante Pizzeria La Pergola – Via Adua, 6, 66054 Vasto (CH)</p>
+                <p class="font-medium text-stone-900">1. Tipologie di Dati raccolti</p>
+                <p>Fra i Dati Personali raccolti da questa Applicazione, in modo autonomo o tramite terze parti, ci sono: Nome, Numero di Telefono e i cookie d'uso generati da Google Maps.</p>
+                <p class="font-medium text-stone-900">2. Modalità e luogo del trattamento dei Dati raccolti</p>
+                <p>Il Titolare adotta le opportune misure di sicurezza volte ad impedire l’accesso, la divulgazione, la modifica o la distruzione non autorizzate dei Dati Personali. Il trattamento è effettuato mediante strumenti informatici con logiche organizzative strettamente correlate alle finalità di contatto.</p>
+                <p class="font-medium text-stone-900">3. Finalità del Trattamento dei Dati raccolti</p>
+                <p>I Dati dell’Utente sono raccolti per consentire al Titolare di fornire il servizio di contatto e gestione delle prenotazioni.</p>
+                <p class="font-medium text-stone-900">4. Utilizzo dei Cookie</p>
+                <p>Questo sito si avvale di cookie tecnici necessari al corretto funzionamento dell'interfaccia di navigazione e memorizzazione del consenso. L'uso della mappa dinamica prevede il tracciamento anonimo IP da parte di Google Inc. in caso di accettazione.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const bar1 = document.getElementById('bar1');
+        const bar2 = document.getElementById('bar2');
+        const bar3 = document.getElementById('bar3');
+        const privacyModal = document.getElementById('privacy-modal');
+        const privacyCheck = document.getElementById('privacy-check');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function toggleMenu() {
+            const isOpen = mobileMenu.classList.contains('translate-x-0');
+            if (!isOpen) {
+                mobileMenu.classList.remove('translate-x-full'); mobileMenu.classList.add('translate-x-0');
+                bar1.classList.add('rotate-45', 'translate-y-1.5'); bar2.classList.add('opacity-0'); bar3.classList.add('-rotate-45', '-translate-y-1.5');
+            } else {
+                mobileMenu.classList.remove('translate-x-0'); mobileMenu.classList.add('translate-x-full');
+                bar1.classList.remove('rotate-45', 'translate-y-1.5'); bar2.classList.remove('opacity-0'); bar3.classList.remove('-rotate-45', '-translate-y-1.5');
+            }
+        }
+        menuBtn.addEventListener('click', toggleMenu);
+        document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
+
+        privacyCheck.addEventListener('change', function() {
+            if(this.checked) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('bg-stone-400', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-stone-900');
+                submitBtn.innerText = "Invia Prenotazione";
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-stone-400', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-stone-900');
+                submitBtn.innerText = "Accetta la Privacy per Continuare";
+            }
+        });
+
+        function togglePrivacyModal(e) {
+            if(e) e.preventDefault();
+            const isHidden = privacyModal.classList.contains('opacity-0');
+            if(isHidden) {
+                privacyModal.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                privacyModal.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+        document.getElementById('open-privacy-link').addEventListener('click', togglePrivacyModal);
+        document.getElementById('open-privacy-cookie').addEventListener('click', togglePrivacyModal);
+        document.getElementById('footer-privacy-btn').addEventListener('click', togglePrivacyModal);
+        document.getElementById('close-privacy').addEventListener('click', togglePrivacyModal);
+
+        const banner = document.getElementById('cookie-banner');
+        const mapContainer = document.getElementById('map-container');
+
+        function loadInteractiveMap() {
+            const mapContainer = document.getElementById('map-container');
+            mapContainer.classList.remove('p-6', 'bg-stone-100', 'border', 'border-stone-200');
+            
+            // Mappa centrata sul ristorante La Pergola, Vasto
+            mapContainer.innerHTML = `<iframe src="https://maps.google.com/maps?q=Ristorante%20Pizzeria%20La%20Pergola%20Vasto&t=&z=18&ie=UTF8&iwloc=&output=embed" class="w-full h-full border-0 rounded-2xl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+        }
+
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('cookie-consent');
+            if (consent === 'accepted') {
+                loadInteractiveMap();
+            } else if (consent === null) {
+                banner.classList.remove('hidden');
+                setTimeout(() => { banner.classList.remove('translate-y-20', 'opacity-0'); }, 100);
+            }
+        }
+
+        document.getElementById('cookie-accept').addEventListener('click', () => {
+            localStorage.setItem('cookie-consent', 'accepted');
+            banner.classList.add('translate-y-20', 'opacity-0');
+            setTimeout(() => { banner.classList.add('hidden'); }, 500);
+            loadInteractiveMap();
+        });
+
+        document.getElementById('unlock-maps-btn').addEventListener('click', () => {
+            localStorage.setItem('cookie-consent', 'accepted');
+            banner.classList.add('translate-y-20', 'opacity-0');
+            loadInteractiveMap();
+        });
+
+        document.getElementById('cookie-reject').addEventListener('click', () => {
+            localStorage.setItem('cookie-consent', 'rejected');
+            banner.classList.add('translate-y-20', 'opacity-0');
+            setTimeout(() => { banner.classList.add('hidden'); }, 500);
+        });
+
+        window.addEventListener('DOMContentLoaded', checkCookieConsent);
+    </script>
+</body>
+</html>
